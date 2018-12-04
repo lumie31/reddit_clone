@@ -13,11 +13,15 @@
 <body>
   <nav class="navbar navbar-dark bg-dark">
     <div class="navbar-brand">
-      Reddit Clone
+      Reddit, Clone
     </div>
 
     <div class="navbar-text">
-      log in/log out
+      {{# if currentUserId}}
+      <a class="nav-link" href="/logout">log out</a>
+      {{else}}
+      <a class="nav-link" href="/login">log in</a>
+      {{/if}}
     </div>
   </nav>
 
