@@ -1,9 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../models/user");
+const auth = require("./helpers/auth");
 
 //Users Index
-router.get("/", (req, res, next) => {
+router.get("/", auth.requireLogin, (req, res, next) => {
   User.find({}, "username", (err, users) => {
     if (err) {
       console.log(err);
