@@ -13,6 +13,17 @@ var app = express();
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "hbs");
 
+// configure sessions
+const session = require("express-session");
+app.use(
+  session({
+    secret: "secret-unique-code",
+    cookie: { maxAge: 3600000 },
+    resave: true,
+    saveUninitialized: true
+  })
+);
+
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
