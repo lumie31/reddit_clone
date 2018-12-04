@@ -42,7 +42,10 @@ app.use(function(err, req, res, next) {
 const mongoose = require("mongoose");
 const mongoURI =
   "mongodb://reddit_clone:lumidizzle31@ds147450.mlab.com:47450/reddit_clone";
-mongoose.connect(mongoURI);
+mongoose.connect(
+  mongoURI,
+  { useNewUrlParser: true }
+);
 mongoose.Promise = global.Promise;
 let db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
