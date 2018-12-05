@@ -3,6 +3,10 @@ const router = express.Router();
 
 const auth = require("./helpers/auth");
 const Room = require("../models/room");
+const Post = require("../models/post");
+
+//require the posts controller
+const posts = require("./posts");
 
 // Rooms index
 router.get("/", (req, res, next) => {
@@ -26,8 +30,12 @@ router.get("/:id", auth.requireLogin, (req, res, next) => {
     if (err) {
       console.error(err);
     }
-
-    res.render("rooms/show", { room: room });
+    Post.find({ room: room }, (err, posts) => {
+      if (err) {
+        console.error(err);
+      }
+      res.render("rooms/show", { room: room, posts: posts });
+    });
   });
 });
 
@@ -64,5 +72,7 @@ router.post("/", auth.requireLogin, (req, res, next) => {
     return res.redirect("/rooms");
   });
 });
+
+router.use("/:roomId/posts", posts);
 
 module.exports = router;
