@@ -37,6 +37,20 @@ router.post("/", auth.requireLogin, (req, res, next) => {
   });
 });
 
+router.post("/:id", auth.requireLogin, (req, res, next) => {
+  Post.findById(req.params.id, function(err, post) {
+    post.points += parseInt(req.body.points);
+
+    post.save(function(err, post) {
+      if (err) {
+        console.error(err);
+      }
+
+      return res.redirect(`/rooms/${post.room}`);
+    });
+  });
+});
+
 router.use("/:postId/comments", commentsRouter);
 
 module.exports = router;

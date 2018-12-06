@@ -30,12 +30,19 @@ router.get("/:id", auth.requireLogin, (req, res, next) => {
     if (err) {
       console.error(err);
     }
-    Post.find({ room: room }, (err, posts) => {
-      if (err) {
-        console.error(err);
-      }
-      res.render("rooms/show", { room: room, posts: posts });
-    });
+    Post.find({ room: room })
+      .sort({ points: -1 })
+      .populate("comments")
+      .exec(function(err, posts) {
+        if (err) {
+          console.error(err);
+        }
+        res.render("rooms/show", {
+          room: room,
+          posts: posts,
+          roomId: req.params.id
+        });
+      });
   });
 });
 

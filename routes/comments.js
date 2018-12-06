@@ -21,4 +21,35 @@ router.get("/new", auth.requireLogin, (req, res, next) => {
   });
 });
 
+router.post("/", auth.requireLogin, (req, res, next) => {
+  Room.findById(req.params.roomId, (err, room) => {
+    if (err) {
+      console.error(err);
+    } else {
+      Post.findById(req.params.postId, (err, post) => {
+        if (err) {
+          console.error(err);
+        } else {
+          let comment = new Comment(req.body);
+          post.comments.unshift(comment);
+
+          post.save((err, post) => {
+            if (err) {
+              console.error(err);
+            } else {
+              comment.save((err, comment) => {
+                if (err) {
+                  console.error(err);
+                } else {
+                  return res.redirect(`/rooms/${room.id}`);
+                }
+              });
+            }
+          });
+        }
+      });
+    }
+  });
+});
+
 module.exports = router;
